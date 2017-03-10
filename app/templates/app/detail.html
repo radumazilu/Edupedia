@@ -1,0 +1,171 @@
+{% extends 'app/base_visitor.html' %}
+
+{% block body %}
+
+<div class="demo-ribbon"></div>
+
+<div class="demo-container mdl-grid">
+
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+
+  <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--10-col topic-wrapper">
+    <h1>{{ topic.title }}</h1>
+    <p>By {{ topic.user.username }}</p>
+
+    <!-- If statement for showing an error message -->
+    {% if error_message %}
+      <p style="color:red; font-size:24px">
+        <strong>Error: {{ error_message }}</strong>
+      </p>
+    {% endif %}
+
+    <!-- Overview of the topic -->
+    <div class="overview-wrapper">
+      <div class="row">
+
+        {% if topic.is_basic != True %}
+
+        <div class="col-md-12 text-left overview">
+          <h3>Before {{ topic.title }}...</h3>
+          <p>You're on your way to mastering {{ topic.title }}, but first you should take a look at:</p>
+          <ul>
+
+            {% if topic.main_requirement %}
+
+            <li class="topic-requirement">
+              <span class="circle"></span>
+              <a href="{% url 'app:detail' topic.main_requirement.id %}">
+                <h3>{{ topic.main_requirement.title }}</h3>
+              </a>
+            </li>
+
+            {% endif %}
+
+          </ul>
+
+          <div class="dropdown show all-requirements">
+            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-menu-down"></span>&nbsp;See everything you need to know
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+              {% for req in topic.requirements.all %}
+                  <a href="{% url 'app:detail' req.id %}" class="dropdown-item">
+                    <p>{{ req.title }}</p>
+                  </a>
+              {% endfor %}
+
+            </div>
+          </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-md-12 text-left overview">
+          <h3>Start with {{ topic.title }} and work your way up to </h3>
+        </div>
+
+        {% endif %}
+
+        <div class="col-md-12 text-left overview">
+          <h3>What is {{ topic.title }}?</h3>
+          <p>
+            {{ topic.content }}
+          </p>
+        </div>
+
+        {% if topic.is_first != True %}
+
+          {% if topic.requirement_for %}
+
+            <div class="col-md-12 text-left overview">
+              <h3>After {{ topic.title }}...</h3>
+              <p>Congratulations! You can now dive into
+                <a href="{% url 'app:detail' topic.requirement_for.id %}">{{ topic.requirement_for.title }}</a>
+              </p>
+            </div>
+
+          {% else %}
+
+            <div class="col-md-12 text-left overview">
+              <h3>Uups..</h3>
+              <p>There is no parent of this topic topic.</p>
+              <a href="{% url 'app:create_topic' %}">
+                <button type="button" class="btn btn-success">
+                  <span class="glyphicon glyphicon-plus"></span>&nbsp; Add requirement_for
+                </button>
+              </a>
+            </div>
+
+          {% endif %}
+
+        {% else %}
+
+          <div class="col-md-12 text-left overview">
+            <h3>Amazing!</h3>
+            <p>If you've gone through all the requirements, you've mastered {{ topic.title }}</p>
+          </div>
+
+        {% endif %}
+
+      </div>
+
+
+        {% if topic.is_basic != True %}
+
+        <div class="row add-requirements">
+          <div class="col-sm-8 text-left">
+            <h3>What else do you think is required to know {{ topic.title }}?</h3>
+            <br>
+            <div class="dropdown show">
+              <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-menu-down"></span>&nbsp; Add Requirements
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                {% for req in topics %}
+                    <a href="{% url 'app:add_requirement' topic.id req.id %}" class="dropdown-item">
+                      <p>{{ req.title }}</p>
+                    </a>
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4 text-right edit">
+            <a href="{% url 'app:edit_topic' topic.id %}">
+              <button class="btn btn-danger" type="button">
+                Edit Topic
+              </button>
+            </a>
+          </div>
+        </div>
+
+        {% else %}
+
+        <div class="row add-requirements">
+          <div class="col-sm-12 text-right edit">
+            <a href="{% url 'app:edit_topic' topic.id %}">
+              <button class="btn btn-danger dropdown-toggle" type="button">
+                Edit Topic
+              </button>
+            </a>
+          </div>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+  </div>
+</div>
+
+<a href="{% url 'app:edit_topic' topic.id %}" id="edit-page" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast" data-upgraded=",MaterialButton,MaterialRipple">
+  Edit Page
+  <span class="mdl-button__ripple-container">
+    <span class="mdl-ripple is-animating" style="width: 258.5px; height: 258.5px; transform: translate(-50%, -50%) translate(13px, 13px);"></span>
+  </span>
+</a>
+
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends nav_bar %}
+{% block topics_active %}active{% endblock %}
+
+{% block body %}
+
+<div class="mdl-gen mdl-cell mdl-cell--12-col">
+  <h2>This is a 12 col grid</h2>
+  <div class="mdl-grid">
+    <div class="mdl-gen__panel mdl-gen__panel--left mdl-cell mdl-cell--6-col-desktop mdl-cell--8-col">
+      <h4>6 col inside</h4>
+      <div id="wheel">
+        <div class="mdl-gen-download">
+          <h1>Hello</h1>
+          <p>
+            Lorem ipsum dolor sit amet, dicam salutatus vulputate at has, cum nullam facilisis ei. Omnium referrentur cum eu, ex sale sanctus admodum eum. Amet imperdiet ad sit. In mei omittam facilisi persecuti, mandamus perpetua torquatos mel cu.
+            Te qui dolore soleat nonumes. Reque omnes aliquando mei no, ut nonumes propriae eam. Utamur consulatu temporibus ei eos, ei dicta labore gloriatur sit. Sit id virtute pericula, pri habeo nominati et.
+          </p>
+          <a href="#" id="download" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--fab"><i class="material-icons">file_download</i></a>
+        </div>
+      </div>
+    </div>
+    <div class="mdl-gen__panel--right mdl-gen__panel mdl-cell mdl-cell--4-col-desktop mdl-cell--8-col">
+      <h4>Another 4 col</h4>
+      <div class="mdl-gen__desc docs-text-styling">
+        <h1>Hello</h1>
+        <p>
+          Lorem ipsum dolor sit amet, dicam salutatus vulputate at has, cum nullam facilisis ei. Omnium referrentur cum eu, ex sale sanctus admodum eum. Amet imperdiet ad sit. In mei omittam facilisi persecuti, mandamus perpetua torquatos mel cu.
+          Te qui dolore soleat nonumes. Reque omnes aliquando mei no, ut nonumes propriae eam. Utamur consulatu temporibus ei eos, ei dicta labore gloriatur sit. Sit id virtute pericula, pri habeo nominati et.
+        </p>
+        <a href="#" id="download" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--fab"><i class="material-icons">file_download</i></a>
+      </div>
+      <div class="mdl-gen__preview">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid topic-wrapper">
+
+  <div class="col-sm-12">
+    {% if not user.username or request.path == "/app/discover/" %}
+      <h1>Discover Topics</h1>
+    {% else %}
+      <h1>Your Topics</h1>
+    {% endif %}
+  </div>
+
+  <!-- Topics -->
+  <div class="container">
+    <div class="row">
+
+      {% if topics %}
+
+          {% for topic in topics %}
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+              <div class="topic-container">
+                <div class="requirement-info">
+                    <!-- View requirements for topic -->
+                    {% if user.username %}
+                      <a href="{% url 'app:detail' topic.id %}">
+                        {{ topic.title }}
+                      </a>
+                    {% else %}
+                      <a href="{% url 'app:detail' topic.id %}">
+                        {{ topic.title }}
+                      </a>
+                    {% endif %}
+                </div>
+
+                <!-- Delete topic (Only if logged in) -->
+                {% if user.username == topic.user.username %}
+                  <form action="{% url 'app:delete_topic' topic.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="topic_id" value="{{ topic.id }}" />
+                    <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </form>
+                {% endif %}
+
+
+              </div>
+
+            </div>
+
+          {% endfor %}
+
+      {% else %}
+        <div class="col-sm-12">
+          <br>
+          <a href="{% url 'app:create_topic' %}">
+            <button type="button" class="btn btn-success">
+              <span class="glyphicon glyphicon-plus"></span>&nbsp; Add a Topic
+            </button>
+          </a>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- If user searches and there subtopics, display them -->
+  {% if sub_topics %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Sub Topics</h3>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Subtopics</th>
+                                    <th>Part of</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sub_topic in sub_topics %}
+                                    <tr>
+                                        <td>{{ sub_topic.title }}</td>
+                                        <td>{{ sub_topic.requirements }}</td>
+                                        <td>
+                                            <a href="{% url 'app:detail' sub_topic.topic.id %}">{{ sub_topic.topic.title }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

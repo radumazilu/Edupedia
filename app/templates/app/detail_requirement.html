@@ -1,0 +1,54 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+    <h1>{{ requirement.title }}</h1>
+    <h3>By {{ topic.user.username }}</h3>
+
+    <!-- If statement for showing an error message -->
+    {% if error_message %}
+      <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    <!-- Overview of the requirement -->
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-12 text-left">
+          <h3>What is {{ requirement.title }}?</h3>
+          <p>Lorem ipsum dolor sit amet, no qui commune sadipscing definitiones, cu altera alterum volumus eum, ex duis inimicus theophrastus qui. Sint vitae apeirian ne vim, pri meliore epicuri temporibus ne. Ius no homero tibique. His maiorum interpretaris ea, no mei delectus voluptaria, zril similique vis no.
+An mutat velit has. Dolorum salutandi his ei, ut sea labore quaestio. Stet eirmod eruditi per id, an doctus accumsan mei. Eos ei elitr consetetur, mea eu lucilius splendide. Ei meis altera definitionem vel.
+          </p>
+        </div>
+
+        <div class="col-md-12 text-left">
+          <h3>What for?</h3>
+          <p>Lorem ipsum dolor sit amet, no qui commune sadipscing definitiones, cu altera alterum volumus eum, ex duis inimicus theophrastus qui. Sint vitae apeirian ne vim, pri meliore epicuri temporibus ne. Ius no homero tibique. His maiorum interpretaris ea, no mei delectus voluptaria, zril similique vis no.
+An mutat velit has. Dolorum salutandi his ei, ut sea labore quaestio. Stet eirmod eruditi per id, an doctus accumsan mei. Eos ei elitr consetetur, mea eu lucilius splendide. Ei meis altera definitionem vel.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- List of requirements -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-left requirements-list">
+
+          <h3>Requirements List</h3>
+          <ul>
+            {% for req in requirement.requirement_set.all reversed %}
+              <li>
+                <a href="{% url 'app:detail_requirement' learning_key req.id %}">
+                  <p>{{ req.title }}</p>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}

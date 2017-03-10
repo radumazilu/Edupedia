@@ -1,0 +1,103 @@
+{% extends nav_bar %}
+{% block topics_active %}active{% endblock %}
+
+{% block body %}
+
+<div class="content-grid mdl-grid"> <!-- Start Grid -->
+
+    <div class="mdl-grid"> <!-- Topics Grid -->
+
+      <div class="mdl-gen mdl-cell mdl-cell--12-col title-cell">
+        {% if not user.username or request.path == "/app/discover/" %}
+          <h1>Discover Topics</h1>
+        {% else %}
+          <h1>Your Topics</h1>
+        {% endif %}
+      </div>
+
+      {% if topics %}
+
+          {% for topic in topics %}
+
+              <!-- Square topic card -->
+              <div class="mdl-gen mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone topic-container">
+                <div class="demo-card-square mdl-card mdl-shadow--2dp">
+                  <div class="mdl-card__title mdl-card--expand">
+                    <h2 class="mdl-card__title-text">{{ topic.title }}</h2>
+                  </div>
+                  <div class="mdl-card__supporting-text">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Aenan convallis.
+                  </div>
+                  <div class="mdl-card__actions mdl-card--border">
+                    <!-- View details of topic -->
+                    <a href="{% url 'app:detail' topic.id %}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                      View Details
+                    </a>
+                    <!-- Delete topic (Only if logged in) -->
+                    {% if user.username == topic.user.username %}
+                      <form action="{% url 'app:delete_topic' topic.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="topic_id" value="{{ topic.id }}" />
+                        <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+                          <i class="material-icons">delete</i>
+                        </button>
+                      </form>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+          {% endfor %}
+
+      {% else %}
+        <div class="mdl-gen mdl-cell mdl-cell--12-col">
+          <br>
+          <a href="{% url 'app:create_topic' %}">
+            <button type="button" class="btn btn-success">
+              <span class="glyphicon glyphicon-plus"></span>&nbsp; Add a Topic
+            </button>
+          </a>
+        </div>
+      {% endif %}
+
+    </div> <!-- End Topics Grid -->
+
+  <!-- If user searches and there subtopics, display them -->
+  {% if sub_topics %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Sub Topics</h3>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Subtopics</th>
+                                    <th>Part of</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sub_topic in sub_topics %}
+                                    <tr>
+                                        <td>{{ sub_topic.title }}</td>
+                                        <td>{{ sub_topic.requirements }}</td>
+                                        <td>
+                                            <a href="{% url 'app:detail' sub_topic.topic.id %}">{{ sub_topic.topic.title }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div> <!-- End Grid -->
+
+{% endblock %}
