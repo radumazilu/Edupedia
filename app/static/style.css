@@ -206,6 +206,19 @@ a:hover {
   flex-shrink: 0;
 }
 
+.bar {
+  box-sizing: border-box;
+  background: #3F51B5;
+  color: white;
+  width: 220px;
+  padding: 8px;
+  border-radius: 2px
+}
+
+.dropdown-item p {
+  margin: 10px 0;
+}
+
 #edit-page {
   position: fixed;
   display: block;

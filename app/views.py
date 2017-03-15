@@ -9,7 +9,6 @@ from django.core import serializers
 
 
 def index(request):
-    print "Hello"
     nav_bar = 'app/base_visitor.html'
     topics = Topic.objects.all()
     return render(request, 'app/index.html', {'topics': topics, 'nav_bar': nav_bar})
@@ -43,9 +42,6 @@ def change_requirements(topic):
         rel.save()
 
 def create_topic(request):
-    # if not request.user.is_authenticated():
-    #     return render(request, 'app/login.html')
-    # else:
     form = TopicForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         topic = form.save(commit=False)
@@ -61,7 +57,14 @@ def create_topic(request):
     }
     return render(request, 'app/create_topic.html', context)
 
+def add_req_temp(request, to_topic_id, from_topic_id):
+    print "Hello"
+    nav_bar = 'app/base_visitor.html'
+    topics = Topic.objects.all()
+    return render(request, 'app/index.html', {'topics': topics, 'nav_bar': nav_bar})
+
 def add_requirement(request, to_topic_id, from_topic_id):
+    print "Adding requirement"
     user = request.user
     nav_bar = 'app/base_visitor.html'
     topics = Topic.objects.all()

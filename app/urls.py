@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^create_topic/$', views.create_topic, name = 'create_topic'),
 
     # /app/<topic_id>/add_requirement/<topic_id>
-    url(r'^(?P<to_topic_id>[0-9]+)/add_requirement/(?P<from_topic_id>[0-9]+)/$', views.add_requirement, name = 'add_requirement'),
+    url(r'^add_requirement/(?P<to_topic_id>[0-9]+)/(?P<from_topic_id>[0-9]+)/$', views.add_requirement, name = 'add_requirement'),
 
     # /app/delete_topic/
     url(r'^delete_topic/(?P<topic_id>[0-9]+)/$', views.delete_topic, name = 'delete_topic'),

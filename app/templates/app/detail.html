@@ -56,6 +56,7 @@
               {% endfor %}
 
             </div>
+
           </div>
 
         </div>
@@ -122,6 +123,25 @@
               <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="glyphicon glyphicon-menu-down"></span>&nbsp; Add Requirements
               </button>
+              <!-- Left aligned menu below button -->
+              <div class="bar">
+                <button id="demo-menu-lower-left"
+                        class="mdl-button mdl-js-button mdl-button--icon">
+                  <i class="material-icons">more_vert</i>
+                </button>
+                Add Requirements
+                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+                    for="demo-menu-lower-left">
+                  {% for req in topics %}
+                  <li class="mdl-menu__item">
+                    <a href="{% url 'app:add_requirement' topic.id req.id %}" class="dropdown-item">
+                      <p>{{ req.title }}</p>
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
                 {% for req in topics %}
@@ -132,25 +152,6 @@
 
               </div>
             </div>
-          </div>
-          <div class="col-sm-4 text-right edit">
-            <a href="{% url 'app:edit_topic' topic.id %}">
-              <button class="btn btn-danger" type="button">
-                Edit Topic
-              </button>
-            </a>
-          </div>
-        </div>
-
-        {% else %}
-
-        <div class="row add-requirements">
-          <div class="col-sm-12 text-right edit">
-            <a href="{% url 'app:edit_topic' topic.id %}">
-              <button class="btn btn-danger dropdown-toggle" type="button">
-                Edit Topic
-              </button>
-            </a>
           </div>
         </div>
 
